@@ -12,6 +12,9 @@ It now stores the uploaded image keys in local storage so that it can be used in
 - **DND Uploader:** [react-dropzone](https://react-dropzone.js.org/)
 - **Storage:** [AWS S3](https://aws.amazon.com/s3/)
 - **Validation:** [Zod](https://zod.dev)
+- **ORM:** [Drizzle](https://drizzle.dev)
+- **Database:** [PostgreSQL](https://www.postgresql.org)
+- **Google OAuth:** [NextAuth](https://next-auth.js.org)
 
 ## Features
 - [x] Drag and drop file upload component with progress bar
