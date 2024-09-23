@@ -24,7 +24,7 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
 1. Install dependencies using pnpm
 
    ```bash
-   pnpm install
+   npm install
    ```
 
 2. Copy the `.env.example` to `.env` and update the variables.
@@ -36,6 +36,6 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
 3. Start the development server
 
    ```bash
-   pnpm run dev
+   npm run dev
    ```
 
