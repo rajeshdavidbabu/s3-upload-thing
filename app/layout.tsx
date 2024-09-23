@@ -106,7 +106,7 @@ export default async function RootLayout({
             <TailwindIndicator />
           </ThemeProvider>
         </SessionProvider>
-        <Toaster />
+        <Toaster richColors />
       </body>
     </html>
   );

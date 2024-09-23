@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/card";
 import { EmptyCard } from "@/components/uploader/empty-card";
 import { FileItem } from "./file-item";
-import { redirect } from "next/navigation";
-import { verifySession } from "@/app/auth/utils";
+import { Suspense } from "react";
+import { Spinner } from "../helpers/spinner";
 
 export async function FileGallery() {
   const { fileKeys } = await getFilesFromDB();
@@ -26,7 +26,12 @@ export async function FileGallery() {
           <div className="h-full overflow-auto pr-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {fileKeys.map((key) => (
-                <FileItemWrapper key={key} fileKey={key} />
+                <Suspense
+                  key={key}
+                  fallback={<Spinner />}
+                >
+                  <FileItemWrapper key={key} fileKey={key} />
+                </Suspense>
               ))}
             </div>
           </div>
@@ -45,5 +50,5 @@ export async function FileGallery() {
 async function FileItemWrapper({ fileKey }: { fileKey: string }) {
   const url = await getS3DownloadUrl(fileKey);
 
-  return <FileItem url={url ?? ""} fileKey={fileKey} />;
+  return <FileItem fileKey={fileKey} />;
 }

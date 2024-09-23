@@ -22,7 +22,7 @@ export function UploadImage() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Upload files</Button>
+        <Button>Upload files</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
