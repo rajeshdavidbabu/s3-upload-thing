@@ -21,7 +21,13 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
 
 ## Running Locally
 
-### Prerequisites
+
+Copy the `.env.example` to `.env` and update the variables.
+
+   ```bash
+   cp .env.example .env
+   ```
+
 - Setup local postgres db and update .env with your credentials
 - Setup AWS S3 bucket and update .env with your credentials
 - Setup Google OAuth and update .env with your credentials
@@ -32,13 +38,7 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
    npm install
    ```
 
-2. Copy the `.env.example` to `.env` and update the variables.
-
-   ```bash
-   cp .env.example .env
-   ```
-
-3. Start the development server
+2. Start the development server
 
    ```bash
    npm run dev
