@@ -16,29 +16,28 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
 
 ## Features
 - [x] Drag and drop file upload component with progress bar
-- [x] React-hook-form integration with `shadnc/ui` form components
 - [x] File dialog demo with adding and removing files from the scrollable list
 
 ## Running Locally
 
 
-Copy the `.env.example` to `.env` and update the variables.
+- Copy the `.env.example` to `.env` and update the variables.
 
    ```bash
    cp .env.example .env
    ```
 
-- Setup local postgres db and update .env with your credentials
+- Setup local postgres db and update .env with your credentials, apply migrations and make sure your DB is running
 - Setup AWS S3 bucket and update .env with your credentials
 - Setup Google OAuth and update .env with your credentials
 
-1. Install dependencies using pnpm
+- Install dependencies using pnpm
 
    ```bash
    npm install
    ```
 
-2. Start the development server
+- Start the development server
 
    ```bash
    npm run dev
