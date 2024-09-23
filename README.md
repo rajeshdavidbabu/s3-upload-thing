@@ -21,6 +21,11 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
 
 ## Running Locally
 
+### Prerequisites
+- Setup local postgres db and update .env with your credentials
+- Setup AWS S3 bucket and update .env with your credentials
+- Setup Google OAuth and update .env with your credentials
+
 1. Install dependencies using pnpm
 
    ```bash
