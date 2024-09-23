@@ -27,7 +27,7 @@ This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/f
    cp .env.example .env
    ```
 
-- Setup local postgres db and update .env with your credentials, apply migrations and make sure your DB is running
+- Setup local postgres db and update .env with your credentials, apply migrations and make sure your DB is running (I just use postgres app on mac)
 - Setup AWS S3 bucket and update .env with your credentials
 - Setup Google OAuth and update .env with your credentials
 
