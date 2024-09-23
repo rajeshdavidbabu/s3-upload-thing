@@ -1,8 +1,6 @@
 This project is a fork of sadmann7's file-uploader https://github.com/sadmann7/file-uploader and it uses S3 instead of uploadthing.
 
-This is a work in progress and is not yet ready for production. I will add more features and fix the bugs as I go along.
-
-It now stores the uploaded image keys in local storage so that it can be used in the image generation process, but I will be adding a database soon.
+🚨🚨🚨 This is a work in progress and is not yet ready for production. I will add more features and fix the bugs as I go along. It now stores the uploaded image keys in local storage so that it can be used in the image generation process, but I will be adding a database soon.
 
 ## Tech Stack
 
