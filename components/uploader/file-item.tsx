@@ -2,11 +2,20 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Trash2 } from "lucide-react"; // Assuming you're using lucide-react for icons
+import { Expand, Trash2, Download } from "lucide-react"; // Assuming you're using lucide-react for icons
 import { Button } from "@/components/ui/button";
 import { deleteFileFromDB, deleteFileFromS3 } from "@/lib/s3/action";
 import { toast } from "sonner";
 import { Spinner, Deleting } from "../helpers/spinner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Link from "next/link";
 
 interface FileItemProps {
   fileKey: string;
@@ -36,11 +45,11 @@ export function FileItem({ fileKey }: FileItemProps) {
         toast.error("Failed to delete file due to unknown error");
       }
       setIsDeleting(false); // Only reset isDeleting if there's an error
-    } 
+    }
   };
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-md bg-gray-200 group">
+    <div className="relative aspect-video overflow-hidden rounded-md bg-gray-200 border-gray-300 border group">
       {isDeleting ? (
         <Deleting />
       ) : (
@@ -50,7 +59,7 @@ export function FileItem({ fileKey }: FileItemProps) {
             src={`/api/files/${encodeURIComponent(fileKey)}`}
             alt={`File ${fileKey}`}
             sizes="(min-width: 640px) 640px, 100vw"
-            className={`object-cover transition-opacity duration-300 ${isFileLoaded ? "opacity-100" : "opacity-0"}`}
+            className={`object-cover transition-opacity duration-300 ${isFileLoaded ? "opacity-100" : "opacity-0"} group-hover:blur-[1px]`}
             fill
             loading="lazy"
             onLoad={() => setIsFileLoaded(true)}
@@ -59,10 +68,47 @@ export function FileItem({ fileKey }: FileItemProps) {
             onClick={onDelete}
             variant="outline"
             size="icon"
-            className="absolute top-2 right-2 p-1 bg-white rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute top-2 right-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           >
-            <Trash2 className="w-5 h-5 text-red-500" />
+            <Trash2 className="w-4 h-4 text-red-500" />
           </Button>
+          <Button
+            onClick={onDelete}
+            variant="outline"
+            size="icon"
+            className="absolute top-2 right-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            <Trash2 className="w-4 h-4 text-red-500" />
+          </Button>
+          <Button 
+            asChild
+            variant="outline"
+            size="icon"
+            className="absolute bottom-2 right-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            <Link href={`/api/files/${encodeURIComponent(fileKey)}`} target="_blank" download={fileKey}>
+              <Download className="w-4 h-4 text-green-500" />
+            </Link>
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="absolute top-2 left-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <Expand className="w-4 h-4 text-blue-500" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-[90vw] h-[90vh]">
+              <Image
+                src={`/api/files/${encodeURIComponent(fileKey)}`}
+                alt={`File ${fileKey}`}
+                fill
+                className="object-contain p-8"
+              />
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </div>
