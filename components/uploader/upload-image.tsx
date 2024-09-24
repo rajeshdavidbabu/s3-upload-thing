@@ -32,8 +32,8 @@ export function UploadImage() {
           </DialogDescription>
         </DialogHeader>
         <FileUploader
-          maxFileCount={4}
-          maxSize={4 * 1024 * 1024}
+          maxFileCount={25}
+          maxSize={10 * 1024 * 1024}
           progresses={progresses}
           onUpload={onUpload}
           disabled={isUploading}

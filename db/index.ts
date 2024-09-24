@@ -5,30 +5,32 @@ import * as schema from "./schema";
 
 const connectionString = env.DATABASE_URL;
 
-// Configure pool settings based on environment
+// Configure pool settings
 const poolConfig = {
-  max: 15, // Pool Size from Supabase config
-  idle_timeout: 0, // Disable idle timeout for Transaction mode
-  connect_timeout: 15, // 15 seconds connection timeout
+  max: 15, // Adjust this based on your database's connection limit
+  idle_timeout: 0,
+  connect_timeout: 15,
   prepare: false,
 };
 
-let _db: PostgresJsDatabase<typeof schema> | null = null;
+declare global {
+  // eslint-disable-next-line no-var
+  var __db__: PostgresJsDatabase<typeof schema> | undefined;
+}
 
-export function getDb(): PostgresJsDatabase<typeof schema> {
-  if (!_db) {
+let db: PostgresJsDatabase<typeof schema>;
+
+if (process.env.NODE_ENV === "production") {
+  // In production, create a new database instance
+  const pool = postgres(connectionString, poolConfig);
+  db = drizzle(pool, { schema });
+} else {
+  // In development, reuse the existing database instance if it exists
+  if (!global.__db__) {
     const pool = postgres(connectionString, poolConfig);
-    _db = drizzle(pool, { schema });
+    global.__db__ = drizzle(pool, { schema });
   }
-  return _db;
+  db = global.__db__;
 }
 
-export async function closeDbConnection() {
-  if (db) {
-    await (db as any).pool.end();
-    _db = null;
-  }
-}
-
-// Export for direct usage
-export const db = getDb();
+export { db };

@@ -1,6 +1,6 @@
 "use server";
 
-import { verifySession, sampleVerifySession } from "@/app/auth/utils";
+import { verifySession } from "@/app/auth/utils";
 import { deleteFile, getDownloadUrl, getUploadParams } from "./core";
 import {
   getFileKeys,
@@ -66,7 +66,7 @@ export async function deleteFileFromS3(key: string) {
   return { success };
 }
 
-export async function getFilesFromDB(page: number = 1, pageSize: number = 20) {
+export async function getFilesFromDB(page: number = 1, pageSize: number = 12) {
   const { userId } = await verifySession();
 
   return getFileKeys(userId, page, pageSize);
