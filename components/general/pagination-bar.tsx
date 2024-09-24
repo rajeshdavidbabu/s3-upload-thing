@@ -52,9 +52,9 @@ export function PaginationBar({ currentPage, totalPages, basePath }: PaginationB
         <PaginationItem>
           <PaginationNext
             href={`${basePath}?page=${Math.min(totalPages, currentPage + 1)}`}
-            aria-disabled={currentPage === totalPages}
-            className={currentPage === totalPages ? 'pointer-events-none cursor-not-allowed opacity-50' : ''} 
-            tabIndex={currentPage === totalPages ? -1 : undefined}
+            aria-disabled={totalPages === 0 || currentPage === totalPages}
+            className={totalPages === 0 || currentPage === totalPages ? 'pointer-events-none cursor-not-allowed opacity-50' : ''} 
+            tabIndex={totalPages === 0 || currentPage === totalPages ? -1 : undefined}
           />
         </PaginationItem>
       </PaginationContent>
