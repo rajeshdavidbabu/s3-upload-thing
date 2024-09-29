@@ -13,14 +13,7 @@ import { redirect } from "next/navigation";
 
 // Configuration object
 const uploadConfig = {
-  maxSizeBytes: 10 * 1024 * 1024, // 10MB
-  allowedMimeTypes: [
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "image/webp",
-    "image/svg+xml",
-  ],
+  maxSizeBytes: 500 * 1024 * 1024, // 500MB
 };
 
 export async function getS3UploadParams(
@@ -34,13 +27,6 @@ export async function getS3UploadParams(
   if (sizeBytes > uploadConfig.maxSizeBytes) {
     throw new Error(
       `File size exceeds the maximum limit of ${uploadConfig.maxSizeBytes / (1024 * 1024)}MB`,
-    );
-  }
-
-  // Validate file type
-  if (!uploadConfig.allowedMimeTypes.includes(contentType)) {
-    throw new Error(
-      `File type ${contentType} is not allowed. Allowed types are: ${uploadConfig.allowedMimeTypes.join(", ")}`,
     );
   }
 

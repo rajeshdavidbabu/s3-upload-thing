@@ -18,9 +18,10 @@ import {
 interface FileItemProps {
   fileKey: string;
   fileName: string;
+  contentType: string;
 }
 
-export function FileItem({ fileKey, fileName }: FileItemProps) {
+export function FileItem({ fileKey, fileName, contentType }: FileItemProps) {
   const [isFileLoaded, setIsFileLoaded] = useState(false);
   const [isThumbnailError, setIsThumbnailError] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -57,7 +58,8 @@ export function FileItem({ fileKey, fileName }: FileItemProps) {
           {!isFileLoaded && <Spinner />}
           {isThumbnailError ? (
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-              <p className="text-white text-lg">Error loading thumbnail</p>
+              <p className="text-white text-lg">Preview not available</p>
+              <p className="text-white text-lg">Use <Download className="w-4 h-4 text-green-500" /> or <Expand className="w-4 h-4 text-blue-500" /> to view the file</p>
             </div>
           ) : (
             <Image
@@ -77,7 +79,7 @@ export function FileItem({ fileKey, fileName }: FileItemProps) {
           <div className="absolute bottom-3 left-2 w-full">
             <PillTooltip name={fileName} />
           </div>
-          <OverlayButtons fileKey={fileKey} onDelete={onDelete} />
+          <OverlayButtons fileKey={fileKey} onDelete={onDelete} contentType={contentType} />
         </>
       )}
     </div>
@@ -101,7 +103,9 @@ function PillTooltip({ name }: { name: string }) {
   );
 }
 
-function OverlayButtons({fileKey, onDelete}: {fileKey: string, onDelete: () => void}) {
+function OverlayButtons({fileKey, contentType, onDelete}: {fileKey: string, contentType: string, onDelete: () => void}) {
+  const isImage = contentType.startsWith('image/');
+
   return (
     <>
       <Button
@@ -134,9 +138,10 @@ function OverlayButtons({fileKey, onDelete}: {fileKey: string, onDelete: () => v
           <Download className="w-4 h-4 text-green-500" />
         </Link>
       </Button>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button
+      {isImage && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
             variant="outline"
             size="icon"
             className="absolute top-2 left-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -153,6 +158,7 @@ function OverlayButtons({fileKey, onDelete}: {fileKey: string, onDelete: () => v
           />
         </DialogContent>
       </Dialog>
+      )}
     </>
   );
 }

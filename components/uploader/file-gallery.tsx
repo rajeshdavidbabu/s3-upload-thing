@@ -29,9 +29,9 @@ export async function FileGallery({ page }: FileGalleryProps) {
         {fileKeys.length > 0 ? (
           <div className="h-full overflow-auto pr-4 scroll-smooth">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {fileKeys.map(({ s3Key, filename }) => (
+              {fileKeys.map(({ s3Key, filename, contentType }) => (
                 <Suspense key={s3Key} fallback={<Spinner />}>
-                  <FileItemWrapper key={s3Key} fileKey={s3Key} fileName={filename} />
+                  <FileItemWrapper key={s3Key} fileKey={s3Key} fileName={filename} contentType={contentType} />
                 </Suspense>
               ))}
             </div>
@@ -55,6 +55,6 @@ export async function FileGallery({ page }: FileGalleryProps) {
   );
 }
 
-async function FileItemWrapper({ fileKey, fileName }: { fileKey: string, fileName: string }) {
-  return <FileItem fileKey={fileKey} fileName={fileName} />;
+async function FileItemWrapper({ fileKey, fileName, contentType }: { fileKey: string, fileName: string, contentType: string }) {
+  return <FileItem fileKey={fileKey} fileName={fileName} contentType={contentType} />;
 }
