@@ -16,6 +16,7 @@ export async function getFileKeys(
   const result = await db
     .select({
       s3Key: files.s3Key,
+      filename: files.filename,
     })
     .from(files)
     .where(eq(files.userId, userId))
@@ -28,7 +29,10 @@ export async function getFileKeys(
     .from(files)
     .where(eq(files.userId, userId));
 
-  const fileKeys = result.map((row) => row.s3Key);
+  const fileKeys = result.map((row) => ({
+    s3Key: row.s3Key,
+    filename: row.filename,
+  }));
   const totalCount = totalCountResult[0]?.count ?? 0;
 
   console.log(fileKeys);

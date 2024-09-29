@@ -11,6 +11,7 @@ const envSchema = zod.object({
   AWS_SECRET_ACCESS_KEY: zod.string().min(1),
   AWS_REGION: zod.string().min(1),
   AWS_BUCKET_NAME: zod.string().min(1),
+  AWS_THUMBNAIL_BUCKET_NAME: zod.string().min(1),
   NODE_ENV: zod.enum(["development", "test", "production"]),
 });
 

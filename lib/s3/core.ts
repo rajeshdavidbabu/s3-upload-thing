@@ -5,6 +5,7 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
   S3Client,
+  HeadObjectCommand,
 } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -64,6 +65,34 @@ export async function getDownloadUrl(key: string) {
     return { error: "Failed to generate download URL" };
   }
 }
+
+export async function getThumbnailDownloadUrl(key: string) {
+  try {
+    const command = new GetObjectCommand({
+      Bucket: env.AWS_THUMBNAIL_BUCKET_NAME,
+      Key: key,
+    });
+
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+    return { url };
+  } catch (error) {
+    return { error: "Failed to generate thumbnail download URL" };
+  }
+}
+
+export async function checkS3ObjectExists(key: string): Promise<boolean> {
+  try {
+    await s3Client.send(new HeadObjectCommand({
+      Bucket: env.AWS_THUMBNAIL_BUCKET_NAME,
+      Key: key,
+    }));
+    return true;
+  } catch (error) {
+    console.log("Error checking if object exists in S3:", error);
+    return false;
+  }
+}
+
 
 export async function deleteFile(key: string) {
   try {

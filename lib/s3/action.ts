@@ -1,7 +1,7 @@
 "use server";
 
 import { verifySession } from "@/app/auth/utils";
-import { deleteFile, getDownloadUrl, getUploadParams } from "./core";
+import { deleteFile, getDownloadUrl, getThumbnailDownloadUrl, getUploadParams } from "./core";
 import {
   getFileKeys,
   insertFileRecords,
@@ -58,6 +58,14 @@ export async function getS3DownloadUrl(key: string) {
   return url;
 }
 
+export async function getS3ThumbnailDownloadUrl(key: string) {
+  await verifySession();
+
+  const { url } = await getThumbnailDownloadUrl(key);
+
+  return url;
+}
+
 export async function deleteFileFromS3(key: string) {
   await verifySession();
 
@@ -77,6 +85,10 @@ export async function uploadFilesToDB(files: UploadedFile[]) {
 
   try {
     await insertFileRecords(userId, files);
+
+    // Wait for 2 seconds
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
     // Revalidate the dashboard page after successful upload
     revalidatePath("/dashboard");
 
