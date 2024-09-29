@@ -28,7 +28,7 @@ export async function getUploadParams({ contentType }: GetUploadParams) {
       Bucket: env.AWS_BUCKET_NAME,
       Key: key,
       Conditions: [
-        ["content-length-range", 0, 10485760], // up to 10 MB
+        ["content-length-range", 0, 524288000], // up to 10 MB
         ["starts-with", "$Content-Type", contentType],
       ],
       Fields: {

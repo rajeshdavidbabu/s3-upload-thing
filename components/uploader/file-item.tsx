@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Expand, Trash2, Download } from "lucide-react"; // Assuming you're using lucide-react for icons
+import { Expand, Trash2, Download, FileIcon, File } from "lucide-react"; // Assuming you're using lucide-react for icons
 import { Button } from "@/components/ui/button";
 import { deleteFileFromDB, deleteFileFromS3 } from "@/lib/s3/action";
 import { toast } from "sonner";
@@ -22,9 +22,8 @@ interface FileItemProps {
 }
 
 export function FileItem({ fileKey, fileName, contentType }: FileItemProps) {
-  const [isFileLoaded, setIsFileLoaded] = useState(false);
-  const [isThumbnailError, setIsThumbnailError] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const isImage = contentType.startsWith("image/");
 
   const onDelete = async () => {
     setIsDeleting(true);
@@ -55,34 +54,56 @@ export function FileItem({ fileKey, fileName, contentType }: FileItemProps) {
         <Deleting />
       ) : (
         <>
-          {!isFileLoaded && <Spinner />}
-          {isThumbnailError ? (
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-              <p className="text-white text-lg">Preview not available</p>
-              <p className="text-white text-lg">Use <Download className="w-4 h-4 text-green-500" /> or <Expand className="w-4 h-4 text-blue-500" /> to view the file</p>
-            </div>
+          {isImage ? (
+            <ImagePreview fileKey={fileKey} />
           ) : (
-            <Image
-              src={`/api/thumbnails/${encodeURIComponent(fileKey)}`}
-              alt={`File ${fileKey}`}
-              sizes="(min-width: 640px) 640px, 100vw"
-              className={`object-cover transition-opacity duration-300 ${isFileLoaded ? "opacity-100" : "opacity-0"} group-hover:blur-[1px]`}
-              fill
-              loading="lazy"
-              onLoad={() => setIsFileLoaded(true)}
-              onError={() => {
-                setIsThumbnailError(true);
-                setIsFileLoaded(true);
-              }}
-            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex items-center space-x-2">
+                <FileIcon className="w-10 h-10" />
+              </div>
+            </div>
           )}
           <div className="absolute bottom-3 left-2 w-full">
             <PillTooltip name={fileName} />
           </div>
-          <OverlayButtons fileKey={fileKey} onDelete={onDelete} contentType={contentType} />
+          <OverlayButtons
+            fileKey={fileKey}
+            onDelete={onDelete}
+            contentType={contentType}
+          />
         </>
       )}
     </div>
+  );
+}
+
+function ImagePreview({ fileKey }: { fileKey: string }) {
+  const [isFileLoaded, setIsFileLoaded] = useState(false);
+  const [isThumbnailError, setIsThumbnailError] = useState(false);
+
+  return (
+    <>
+      {!isFileLoaded && <Spinner />}
+      {isThumbnailError ? (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+          <p className="text-white text-lg">Preview not available</p>
+        </div>
+      ) : (
+        <Image
+          src={`/api/thumbnails/${encodeURIComponent(fileKey)}`}
+          alt={`File ${fileKey}`}
+          sizes="(min-width: 640px) 640px, 100vw"
+          className={`object-cover transition-opacity duration-300 ${isFileLoaded ? "opacity-100" : "opacity-0"} group-hover:blur-[1px]`}
+          fill
+          loading="lazy"
+          onLoad={() => setIsFileLoaded(true)}
+          onError={() => {
+            setIsThumbnailError(true);
+            setIsFileLoaded(true);
+          }}
+        />
+      )}
+    </>
   );
 }
 
@@ -103,8 +124,16 @@ function PillTooltip({ name }: { name: string }) {
   );
 }
 
-function OverlayButtons({fileKey, contentType, onDelete}: {fileKey: string, contentType: string, onDelete: () => void}) {
-  const isImage = contentType.startsWith('image/');
+function OverlayButtons({
+  fileKey,
+  contentType,
+  onDelete,
+}: {
+  fileKey: string;
+  contentType: string;
+  onDelete: () => void;
+}) {
+  const isImage = contentType.startsWith("image/");
 
   return (
     <>
@@ -142,22 +171,22 @@ function OverlayButtons({fileKey, contentType, onDelete}: {fileKey: string, cont
         <Dialog>
           <DialogTrigger asChild>
             <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-2 left-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          >
-            <Expand className="w-4 h-4 text-blue-500" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-[90vw] h-[90vh]">
-          <Image
-            src={`/api/files/${encodeURIComponent(fileKey)}`}
-            alt={`File ${fileKey}`}
-            fill
-            className="object-contain p-8"
-          />
-        </DialogContent>
-      </Dialog>
+              variant="outline"
+              size="icon"
+              className="absolute top-2 left-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            >
+              <Expand className="w-4 h-4 text-blue-500" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-[90vw] h-[90vh]">
+            <Image
+              src={`/api/files/${encodeURIComponent(fileKey)}`}
+              alt={`File ${fileKey}`}
+              fill
+              className="object-contain p-8"
+            />
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );

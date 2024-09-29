@@ -99,9 +99,6 @@ export function FileUploader(props: FileUploaderProps) {
     onValueChange,
     onUpload,
     progresses,
-    accept = {
-      "image/*": [],
-    },
     maxSize = 1024 * 1024 * 500,
     maxFileCount = 50,
     multiple = false,
@@ -134,7 +131,7 @@ export function FileUploader(props: FileUploaderProps) {
       const newFiles = acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
-        }),
+        })
       );
 
       const updatedFiles = files ? [...files, ...newFiles] : newFiles;
@@ -166,7 +163,7 @@ export function FileUploader(props: FileUploaderProps) {
       }
     },
 
-    [files, maxFileCount, multiple, onUpload, setFiles],
+    [files, maxFileCount, multiple, onUpload, setFiles]
   );
 
   function onRemove(index: number) {
@@ -195,7 +192,7 @@ export function FileUploader(props: FileUploaderProps) {
     <div className="relative flex flex-col gap-6 overflow-hidden">
       <Dropzone
         onDrop={onDrop}
-        accept={accept}
+        
         maxSize={maxSize}
         maxFiles={maxFileCount}
         multiple={maxFileCount > 1 || multiple}
@@ -209,7 +206,7 @@ export function FileUploader(props: FileUploaderProps) {
               "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60",
-              className,
+              className
             )}
             {...dropzoneProps}
           >
