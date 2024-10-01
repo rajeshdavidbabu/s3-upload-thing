@@ -97,6 +97,7 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  safelist: ["uppy-Dashboard-inner"],
 } satisfies Config;
 
 export default config;

@@ -80,3 +80,9 @@
     @apply px-4;
   }
 }
+
+@layer components {
+  .uppy-Dashboard-inner {
+    @apply !w-full !max-w-none;
+  }
+}

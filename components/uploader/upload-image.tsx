@@ -11,7 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FileUploader } from "@/components/uploader/file-uploader";
+
+import { UppyUploader } from "./uppy-uploader";
 
 export function UploadImage() {
   const { data: session } = useSession();
@@ -24,19 +25,14 @@ export function UploadImage() {
       <DialogTrigger asChild>
         <Button>Upload files</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="max-w-[80%]">
         <DialogHeader>
           <DialogTitle>Upload files</DialogTitle>
           <DialogDescription>
             Drag and drop your files here or click to browse.
           </DialogDescription>
         </DialogHeader>
-        <FileUploader
-          progresses={progresses}
-          onUpload={onUpload}
-          disabled={isUploading}
-          multiple={true}
-        />
+        <UppyUploader />
       </DialogContent>
     </Dialog>
   );
