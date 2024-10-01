@@ -1,7 +1,6 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useUploadFile } from "@/app/hooks/use-upload-file";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,11 +14,6 @@ import {
 import { UppyUploader } from "./uppy-uploader";
 
 export function UploadImage() {
-  const { data: session } = useSession();
-  const { onUpload, progresses, isUploading } = useUploadFile({
-    userId: session?.user?.id,
-  });
-
   return (
     <Dialog>
       <DialogTrigger asChild>
