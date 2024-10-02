@@ -3,9 +3,9 @@
 import { verifySession } from "@/app/auth/utils";
 import { deleteFile, getDownloadUrl, getThumbnailDownloadUrl, getUploadParams } from "./core";
 import {
-  getFileKeys,
   insertFileRecords,
   deleteFileRecord,
+  getFileInfo,
 } from "@/db/api/file";
 import { UploadedFile } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -60,10 +60,10 @@ export async function deleteFileFromS3(key: string) {
   return { success };
 }
 
-export async function getFilesFromDB(page: number = 1, pageSize: number = 12) {
+export async function getFilesFromDB(page: number, pageSize: number, selectedFileTypes: string[], fileName?: string) {
   const { userId } = await verifySession();
 
-  return getFileKeys(userId, page, pageSize);
+  return getFileInfo(userId, page, pageSize, selectedFileTypes, fileName);
 }
 
 export async function uploadFilesToDB(files: UploadedFile[]) {

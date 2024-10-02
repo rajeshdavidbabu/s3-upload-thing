@@ -8,6 +8,8 @@ export async function GET(
   await verifySession();
 
   const { key } = params;
+  const { searchParams } = new URL(request.url);
+  const contentType = searchParams.get('contentType') || 'application/octet-stream';
 
   // Generate pre-signed URL
   const signedUrl = await getS3DownloadUrl(key);
@@ -15,6 +17,8 @@ export async function GET(
   if (!signedUrl) {
     return new Response("Failed to generate download URL", { status: 500 });
   }
+
+  console.log("download url", signedUrl);
 
   // NOTE: You can directly return the signedUrl, but we are fetching the files
   // from S3 using the signed URL to avoid any unauthorized access to the files.
@@ -28,6 +32,7 @@ export async function GET(
   return new Response(imageStream, {
     headers: {
       "Cache-Control": "public, max-age=3599",
+      "Content-Type": contentType,
     },
   });
 }

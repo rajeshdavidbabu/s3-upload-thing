@@ -15,13 +15,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatBytes } from "@/lib/utils";
 interface FileItemProps {
   fileKey: string;
   fileName: string;
   contentType: string;
+  size: number;
 }
 
-export function FileItem({ fileKey, fileName, contentType }: FileItemProps) {
+export function FileItem({ fileKey, fileName, contentType, size }: FileItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const isImage = contentType.startsWith("image/");
 
@@ -64,7 +66,7 @@ export function FileItem({ fileKey, fileName, contentType }: FileItemProps) {
             </div>
           )}
           <div className="absolute bottom-3 left-2 w-full">
-            <PillTooltip name={fileName} />
+            <PillTooltip name={fileName} contentType={contentType} size={size} />
           </div>
           <OverlayButtons
             fileKey={fileKey}
@@ -107,17 +109,27 @@ function ImagePreview({ fileKey }: { fileKey: string }) {
   );
 }
 
-function PillTooltip({ name }: { name: string }) {
+function PillTooltip({ name, contentType, size }: { name: string, contentType: string, size: number }) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full w-[60%]">
+          <div className="bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full w-[60%] hover:cursor-pointer">
             <span className="block truncate">{name}</span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side="top">
-          <p className="text-sm">{name}</p>
+        <TooltipContent className="max-w-[300px]">
+          <ul className="text-sm space-y-1">
+            <li>
+              <strong>Name:</strong> {name}
+            </li>
+            <li>
+              <strong>Type:</strong> {contentType}
+            </li>
+            <li>
+              <strong>Size:</strong> {formatBytes(size)}
+            </li>
+          </ul>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -160,7 +172,7 @@ function OverlayButtons({
         className="absolute bottom-2 right-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       >
         <Link
-          href={`/api/files/${encodeURIComponent(fileKey)}`}
+          href={`/api/files/${encodeURIComponent(fileKey)}?contentType=${encodeURIComponent(contentType)}`}
           target="_blank"
           download={fileKey}
         >
