@@ -38,8 +38,6 @@ export default function Dashboard({ searchParams }: DashboardPageProps) {
     fileName = searchParams.fileName;
   }
 
-  console.log('Selected File Types:', selectedFileTypes);
-
   return (
     <div className="grid grid-rows-[auto,1fr] gap-4 h-full">
       <div className="flex justify-between pt-1">

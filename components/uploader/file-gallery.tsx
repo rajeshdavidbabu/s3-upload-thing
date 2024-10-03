@@ -1,4 +1,4 @@
-import { getFilesFromDB } from "@/lib/s3/action";
+import { getFilesFromDB } from "@/lib/db/action";
 import {
   Card,
   CardContent,

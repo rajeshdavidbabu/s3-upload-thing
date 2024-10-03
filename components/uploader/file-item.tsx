@@ -4,10 +4,18 @@ import { useState } from "react";
 import Image from "next/image";
 import { Expand, Trash2, Download, FileIcon, File } from "lucide-react"; // Assuming you're using lucide-react for icons
 import { Button } from "@/components/ui/button";
-import { deleteFileFromDB, deleteFileFromS3 } from "@/lib/s3/action";
+import { deleteFileFromS3 } from "@/lib/s3/action";
+import { deleteFileFromDB, revalidateDashboard } from "@/lib/db/action";
 import { toast } from "sonner";
 import { Spinner, Deleting } from "../helpers/spinner";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Link from "next/link";
 import {
   Tooltip,
@@ -16,7 +24,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatBytes } from "@/lib/utils";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { DownloadFile } from "./download-file";
+import { ImageDetailedPreview } from "./image-detailed-preview";
 
 interface FileItemProps {
   fileKey: string;
@@ -25,11 +35,15 @@ interface FileItemProps {
   size: number;
 }
 
-export function FileItem({ fileKey, fileName, contentType, size }: FileItemProps) {
+export function FileItem({
+  fileKey,
+  fileName,
+  contentType,
+  size,
+}: FileItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const isImage = contentType.startsWith("image/");
 
-  console.log('File item size ', size);
   const onDelete = async () => {
     setIsDeleting(true);
     try {
@@ -69,7 +83,11 @@ export function FileItem({ fileKey, fileName, contentType, size }: FileItemProps
             </div>
           )}
           <div className="absolute bottom-3 left-2 w-full">
-            <PillTooltip name={fileName} contentType={contentType} size={size} />
+            <PillTooltip
+              name={fileName}
+              contentType={contentType}
+              size={size}
+            />
           </div>
           <OverlayButtons
             fileKey={fileKey}
@@ -112,7 +130,15 @@ function ImagePreview({ fileKey }: { fileKey: string }) {
   );
 }
 
-function PillTooltip({ name, contentType, size }: { name: string, contentType: string, size: number }) {
+function PillTooltip({
+  name,
+  contentType,
+  size,
+}: {
+  name: string;
+  contentType: string;
+  size: number;
+}) {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -168,22 +194,15 @@ function OverlayButtons({
       >
         <Trash2 className="w-4 h-4 text-red-500" />
       </Button>
-      <Button
-        asChild
-        variant="outline"
-        size="icon"
-        className="absolute bottom-2 right-2 rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-      >
-        <Link
-          href={`/api/files/${encodeURIComponent(fileKey)}?contentType=${encodeURIComponent(contentType)}`}
-          target="_blank"
-          download={fileKey}
-        >
-          <Download className={`w-4 h-4 text-green-500`} />
-        </Link>
-      </Button>
+      <DownloadFile fileKey={fileKey} contentType={contentType} />
       {isImage && (
-        <Dialog>
+        <Dialog
+          onOpenChange={async (open) => {
+            if (!open) {
+              await revalidateDashboard();
+            }
+          }}
+        >
           <DialogTrigger asChild>
             <Button
               variant="outline"
@@ -194,12 +213,15 @@ function OverlayButtons({
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-[90vw] h-[90vh]">
-            <Image
-              src={`/api/files/${encodeURIComponent(fileKey)}`}
-              alt={`File ${fileKey}`}
-              fill
-              className="object-contain p-8"
-            />
+            <DialogHeader className="sr-only">
+              <DialogTitle>Image Preview</DialogTitle>
+              <DialogDescription>
+                Detailed view of the selected image
+              </DialogDescription>
+            </DialogHeader>
+            <div className="w-full h-full">
+              <ImageDetailedPreview fileKey={fileKey} />
+            </div>
           </DialogContent>
         </Dialog>
       )}

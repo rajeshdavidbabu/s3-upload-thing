@@ -26,7 +26,7 @@ export const Social = () => {
         default:
           errorMessage = "Unknown error occurred during sign-in";
       }
-      console.log("error toast should be called ", error);
+      
       setTimeout(() => toast.error(errorMessage));
     }
   }, [error]);

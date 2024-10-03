@@ -1,47 +1,38 @@
 'use server';
 
 import { UsageTrackerClient } from "./usage-tracker-client";
-import { getUserUsage } from "@/lib/s3/action";
+import { getUserUsage } from "@/db/api/usage";
 import { formatBytes } from "@/lib/utils";
 import { verifySession } from "@/app/auth/utils";
-import { HardDrive, Wifi } from "lucide-react";
 
 const getPercentage = (used: number, total: number) => {
   if (used === -1 || total === -1) return 0;
   return Math.min(Math.round((used / total) * 100), 100);
 };
 
-export default async function UsageTracker() {
-  const usageData = await getUserUsage();
+const MAX_STORAGE = 50 * 1024 * 1024 * 1024;
+const MAX_BANDWIDTH = 10 * 1024 * 1024 * 1024;
 
-  console.log(usageData);
+export default async function UsageTracker() {
+  const { userId } = await verifySession();
+  const usageData = await getUserUsage(userId);
 
   const storagePercentage = getPercentage(
     usageData.storageUsedBytes,
-    50 * 1024 * 1024 * 1024
-  ); // Assuming 50GB total
+    MAX_STORAGE
+  );
   const bandwidthPercentage = getPercentage(
     usageData.bandwidthUsedBytes,
-    10 * 1024 * 1024 * 1024
-  ); // Assuming 10GB total
+    MAX_BANDWIDTH
+  );
 
   return (
     <>
-      <div className="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium transition-colors cursor-pointer hover:opacity-70">
-        <span className="flex items-center mr-1 font-bold">Usage: </span>
-        <span className="flex items-center">
-          <HardDrive className="w-4 h-4 mr-1" />
-          <span>{formatBytes(usageData.storageUsedBytes)}</span>
-        </span>
-        <span className="mx-1"> / </span>
-        <span className="flex items-center">
-          <Wifi className="w-4 h-4 mr-1" />
-          <span>{formatBytes(usageData.bandwidthUsedBytes)}</span>
-        </span>
-      </div>
       <UsageTrackerClient
         storageUsed={formatBytes(usageData.storageUsedBytes)}
+        storageMax={formatBytes(MAX_STORAGE)}
         bandwidthUsed={formatBytes(usageData.bandwidthUsedBytes)}
+        bandwidthMax={formatBytes(MAX_BANDWIDTH)}
         storagePercentage={storagePercentage}
         bandwidthPercentage={bandwidthPercentage}
       />

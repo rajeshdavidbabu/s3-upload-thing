@@ -17,8 +17,6 @@ export async function getFileInfo(
 
   let whereClause = eq(files.userId, userId);
 
-  console.log('incoming fileName ', fileName);
-
   if (selectedFileTypes.length > 0) {
     const typeConditions = selectedFileTypes.map(type => {
       switch (type) {
@@ -44,7 +42,6 @@ export async function getFileInfo(
 
   // Add fileName filter
   if (fileName && fileName.trim() !== '') {
-    console.log('fileName here ', fileName);
     const fileNameClause = and(
       whereClause,
       sql`LOWER(${files.filename}) LIKE ${`%${fileName.toLowerCase()}%`}`
@@ -133,4 +130,14 @@ export async function deleteFileRecord(userId: string, s3Key: string) {
     console.error("Error deleting file record:", error);
     throw error;
   }
+}
+
+export async function checkUserFileAccess(userId: string, s3Key: string): Promise<boolean> {
+  const result = await db
+    .select({ exists: sql<boolean>`1` })
+    .from(files)
+    .where(and(eq(files.userId, userId), eq(files.s3Key, s3Key)))
+    .limit(1);
+
+  return result.length > 0;
 }

@@ -8,7 +8,8 @@ import "@uppy/core/dist/style.min.css";
 import "@uppy/dashboard/dist/style.min.css";
 
 import { useState, useRef } from "react";
-import { getS3UploadParams, uploadFilesToDB } from "@/lib/s3/action";
+import { getS3UploadParams } from "@/lib/s3/action";
+import { uploadFilesToDB } from "@/lib/db/action";
 import { toast } from "sonner";
 import { formatBytes } from "@/lib/utils";
 

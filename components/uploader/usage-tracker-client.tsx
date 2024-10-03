@@ -14,6 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 interface UsageTrackerClientProps {
   storageUsed: string;
   bandwidthUsed: string;
+  storageMax: string;
+  bandwidthMax: string;
   storagePercentage: number;
   bandwidthPercentage: number;
 }
@@ -21,6 +23,8 @@ interface UsageTrackerClientProps {
 export function UsageTrackerClient({
   storageUsed,
   bandwidthUsed,
+  storageMax,
+  bandwidthMax,
   storagePercentage,
   bandwidthPercentage,
 }: UsageTrackerClientProps) {
@@ -32,12 +36,16 @@ export function UsageTrackerClient({
             <span className="flex items-center mr-1 font-bold">Usage: </span>
             <span className="flex items-center">
               <HardDrive className="w-4 h-4 mr-1" />
-              <span>{storageUsed}</span>
+              <span>
+                {storageUsed}
+              </span>
             </span>
             <span className="mx-1"> / </span>
             <span className="flex items-center">
               <Wifi className="w-4 h-4 mr-1" />
-              <span>{bandwidthUsed}</span>
+              <span>
+                {bandwidthUsed}
+              </span>
             </span>
           </div>
         </TooltipTrigger>
@@ -50,7 +58,9 @@ export function UsageTrackerClient({
                     <span className="text-sm font-medium flex items-center">
                       <HardDrive className="w-4 h-4 mr-1" /> Storage
                     </span>
-                    <span className="text-sm font-medium">{storageUsed}</span>
+                    <span className="text-sm font-medium">
+                      {storageUsed} / {storageMax}
+                    </span>
                   </div>
                   <Progress value={storagePercentage} className="h-2" />
                 </div>
@@ -59,7 +69,9 @@ export function UsageTrackerClient({
                     <span className="text-sm font-medium flex items-center">
                       <Wifi className="w-4 h-4 mr-1" /> Bandwidth
                     </span>
-                    <span className="text-sm font-medium">{bandwidthUsed}</span>
+                    <span className="text-sm font-medium">
+                      {bandwidthUsed} / {bandwidthMax}
+                    </span>
                   </div>
                   <Progress value={bandwidthPercentage} className="h-2" />
                 </div>
