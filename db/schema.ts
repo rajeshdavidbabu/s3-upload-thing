@@ -57,3 +57,13 @@ export const files = pgTable("file", {
   s3Key: text("s3_key").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const userUsage = pgTable("user_usage", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  storageUsedBytes: integer("storage_used_bytes").notNull().default(0),
+  bandwidthUsedBytes: integer("bandwidth_used_bytes").notNull().default(0),
+  lastUpdated: timestamp("last_updated").defaultNow().notNull(),
+});

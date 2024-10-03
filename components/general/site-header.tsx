@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/general/theme-toggle";
 import { UserButton } from "@/app/auth/components/user-button";
 import { User } from "next-auth";
+import UsageTracker from "../uploader/usage-tracker";
 
 export function SiteHeader({ user }: { user?: User }) {
   return (

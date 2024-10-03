@@ -10,6 +10,7 @@ import {
 import { UploadedFile } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { trackBandwidthUsage, trackStorageChange, getUserUsage as getUserUsageFromDB  } from "@/db/api/usage";
 
 // Configuration object
 const uploadConfig = {
@@ -37,9 +38,16 @@ export async function getS3UploadParams(
 }
 
 export async function getS3DownloadUrl(key: string) {
-  await verifySession();
+  const { userId } = await verifySession();
 
-  const { url } = await getDownloadUrl(key);
+  const { url, size } = await getDownloadUrl(key);
+
+  // Track potential bandwidth usage
+  if (size) {
+    await trackBandwidthUsage(userId, size);
+  }
+
+  console.log('Downloaded file size ', size);
 
   return url;
 }
@@ -72,7 +80,11 @@ export async function uploadFilesToDB(files: UploadedFile[]) {
   try {
     await insertFileRecords(userId, files);
 
-    // Wait for 2 seconds
+    // Track storage increase
+    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+    await trackStorageChange(userId, totalSize);
+
+    // Wait for 2 seconds for thumbnails to be generated
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Revalidate the dashboard page after successful upload
@@ -85,12 +97,20 @@ export async function uploadFilesToDB(files: UploadedFile[]) {
   }
 }
 
-export async function deleteFileFromDB(fileKey: string) {
+export async function deleteFileFromDB(fileKey: string, size: number) {
   const { userId } = await verifySession();
+
+  console.log('Incoming size ', size);
 
   try {
     // Delete the file record from the database
     await deleteFileRecord(userId, fileKey);
+
+    if (size > 0) {     
+      // Track storage decrease
+      await trackStorageChange(userId, -size);
+    }
+
     // Revalidate the dashboard page after successful deletion
     revalidatePath("/dashboard");
 
@@ -99,4 +119,11 @@ export async function deleteFileFromDB(fileKey: string) {
     console.error("Error deleting file:", error);
     return { success: false, message: "Failed to delete file" };
   }
+}
+
+
+export async function getUserUsage() {
+  const { userId } = await verifySession();
+
+  return getUserUsageFromDB(userId);
 }

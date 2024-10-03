@@ -1,5 +1,6 @@
 import { getS3DownloadUrl } from "@/lib/s3/action";
 import { verifySession } from "@/app/auth/utils";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   request: Request,

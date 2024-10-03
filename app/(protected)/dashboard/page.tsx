@@ -3,6 +3,7 @@ import { FileGallery } from "@/components/uploader/file-gallery";
 import { redirect } from "next/navigation";
 import FileTypeFilterDropdown from "@/components/uploader/file-type-filter";
 import SearchByFileName from "@/components/uploader/search-by-file-name";
+import UsageTracker from "@/components/uploader/usage-tracker";
 
 interface DashboardPageProps {
   searchParams: {
@@ -46,7 +47,10 @@ export default function Dashboard({ searchParams }: DashboardPageProps) {
           <SearchByFileName />
           <FileTypeFilterDropdown />
         </div>
-        <UploadImage />
+        <div className="flex items-center gap-4">
+          <UsageTracker />
+          <UploadImage />
+        </div>
       </div>
       <div className="overflow-hidden mb-4">
         <FileGallery page={page} selectedFileTypes={selectedFileTypes} fileName={fileName} />

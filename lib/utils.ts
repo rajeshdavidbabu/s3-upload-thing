@@ -14,14 +14,14 @@ export function formatBytes(
 ) {
   const { decimals = 0, sizeType = "normal" } = opts;
 
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-  const accurateSizes = ["Bytes", "KiB", "MiB", "GiB", "TiB"];
-  if (bytes === 0) return "0 Byte";
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
+  const sizes = ["KB", "MB", "GB", "TB"];
+  const accurateSizes = ["KiB", "MiB", "GiB", "TiB"];
+  if (bytes < 1024) return "0 KB"; // Round up to 1 KB for small values
+  const i = Math.floor(Math.log(bytes) / Math.log(1024)) - 1; // Subtract 1 to start from KB
+  return `${(bytes / Math.pow(1024, i + 1)).toFixed(decimals)} ${
     sizeType === "accurate"
-      ? (accurateSizes[i] ?? "Bytest")
-      : (sizes[i] ?? "Bytes")
+      ? (accurateSizes[i] ?? "KiB")
+      : (sizes[i] ?? "KB")
   }`;
 }
 

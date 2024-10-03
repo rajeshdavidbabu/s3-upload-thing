@@ -53,19 +53,31 @@ export async function getUploadParams({ contentType }: GetUploadParams) {
 
 export async function getDownloadUrl(key: string) {
   try {
-    const command = new GetObjectCommand({
+    // First, get the object metadata to retrieve the size
+    const headCommand = new HeadObjectCommand({
       Bucket: env.AWS_BUCKET_NAME,
       Key: key,
-      // ResponseCacheControl: "public, max-age=3599",
     });
 
-    const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
-    return { url };
+    const headResponse = await s3Client.send(headCommand);
+    const size = headResponse.ContentLength; // This is the file size in bytes
+
+    // Now, generate the download URL
+    const getCommand = new GetObjectCommand({
+      Bucket: env.AWS_BUCKET_NAME,
+      Key: key,
+    });
+
+    const url = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
+
+    return { url, size };
   } catch (error) {
+    console.error("Error generating download URL:", error);
     return { error: "Failed to generate download URL" };
   }
 }
 
+// Thumbnails are pretty small, so we dont need to track bandwidth usage
 export async function getThumbnailDownloadUrl(key: string) {
   try {
     const command = new GetObjectCommand({

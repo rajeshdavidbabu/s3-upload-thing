@@ -16,6 +16,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatBytes } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
+
 interface FileItemProps {
   fileKey: string;
   fileName: string;
@@ -27,11 +29,12 @@ export function FileItem({ fileKey, fileName, contentType, size }: FileItemProps
   const [isDeleting, setIsDeleting] = useState(false);
   const isImage = contentType.startsWith("image/");
 
+  console.log('File item size ', size);
   const onDelete = async () => {
     setIsDeleting(true);
     try {
       const messageS3 = await deleteFileFromS3(fileKey);
-      const messageDB = await deleteFileFromDB(fileKey);
+      const messageDB = await deleteFileFromDB(fileKey, size);
 
       if (!messageS3?.success) {
         throw new Error("Failed to delete file from S3");
@@ -176,7 +179,7 @@ function OverlayButtons({
           target="_blank"
           download={fileKey}
         >
-          <Download className="w-4 h-4 text-green-500" />
+          <Download className={`w-4 h-4 text-green-500`} />
         </Link>
       </Button>
       {isImage && (
