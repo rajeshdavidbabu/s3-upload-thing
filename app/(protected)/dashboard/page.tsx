@@ -50,7 +50,7 @@ export default function Dashboard({ searchParams }: DashboardPageProps) {
           <UploadImage />
         </div>
       </div>
-      <div className="overflow-hidden mb-4">
+      <div className="overflow-hidden">
         <FileGallery page={page} selectedFileTypes={selectedFileTypes} fileName={fileName} />
       </div>
     </div>

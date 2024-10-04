@@ -15,6 +15,8 @@ import { User } from "next-auth";
 import { UserIcon } from "lucide-react";
 
 export const UserButton = ({ user }: { user: User }) => {
+  console.log("User button rendered");
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
@@ -28,10 +30,10 @@ export const UserButton = ({ user }: { user: User }) => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* <DropdownMenuItem>
+        <DropdownMenuItem>
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator /> */}
+        <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogoutButton />
         </DropdownMenuItem>

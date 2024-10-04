@@ -1,9 +1,8 @@
-import type { Metadata, Viewport } from "next";
+import type { Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/general/theme-provider";
 import { SiteHeader } from "@/components/general/site-header";
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/helpers/tailwind-indicator";
 import { Toaster } from "@/components/ui/sonner";
@@ -20,51 +19,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  keywords: [
-    "nextjs",
-    "react",
-    "uploader",
-    "file-uploader",
-    "file-input",
-    "s3-file-uploader",
-    "shadcn-file-uploader",
-    "s3-upload-thing",
-  ],
-  authors: [
-    {
-      name: "rajeshdavidbabu",
-      url: "https://www.rajeshdavidbabu.com",
-    },
-  ],
-  creator: "rajeshdavidbabu",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [`${siteConfig.url}/og.jpg`],
-    creator: "@rajeshdavidbabu",
-  },
-  icons: {
-    icon: "/icon.png",
-  },
-  manifest: `${siteConfig.url}/site.webmanifest`,
-};
 
 export const viewport: Viewport = {
   colorScheme: "dark light",
@@ -102,6 +56,8 @@ export default async function RootLayout({
               <main className="flex-1 overflow-hidden container">
                 {children}
               </main>
+              {/* This div exists to add a gap at the bottom of the page */}
+              <div />
             </div>
             <TailwindIndicator />
           </ThemeProvider>

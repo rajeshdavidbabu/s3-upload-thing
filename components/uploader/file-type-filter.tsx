@@ -53,7 +53,7 @@ export default function FileTypeFilterDropdown() {
     } else {
       params.set("selectedFileTypes", types.join(","));
     }
-    router.push(params.toString() ? `?${params.toString()}` : "/");
+    router.push(params.toString() ? `?${params.toString()}` : "/dashboard");
   };
 
   const isAllSelected = selectedTypes.includes("all");

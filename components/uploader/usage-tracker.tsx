@@ -27,7 +27,7 @@ export default async function UsageTracker() {
   );
 
   return (
-    <>
+    <div className="group">
       <UsageTrackerClient
         storageUsed={formatBytes(usageData.storageUsedBytes)}
         storageMax={formatBytes(MAX_STORAGE)}
@@ -36,6 +36,6 @@ export default async function UsageTracker() {
         storagePercentage={storagePercentage}
         bandwidthPercentage={bandwidthPercentage}
       />
-    </>
+    </div>
   );
 }

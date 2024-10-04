@@ -140,7 +140,7 @@ function PillTooltip({
   size: number;
 }) {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full w-[60%] hover:cursor-pointer">

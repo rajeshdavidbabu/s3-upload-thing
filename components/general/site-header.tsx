@@ -7,6 +7,9 @@ import { ModeToggle } from "@/components/general/theme-toggle";
 import { UserButton } from "@/app/auth/components/user-button";
 import { User } from "next-auth";
 import UsageTracker from "../uploader/usage-tracker";
+import { memo } from "react";
+
+const MemoizedUserButton = memo(UserButton);
 
 export function SiteHeader({ user }: { user?: User }) {
   return (
@@ -21,7 +24,7 @@ export function SiteHeader({ user }: { user?: User }) {
         <nav className="flex flex-1 items-center md:justify-end gap-4">
           <ModeToggle />
           {user ? (
-            <UserButton user={user} />
+            <MemoizedUserButton user={user} />
           ) : (
             <Button variant="ghost" size="icon" className="size-8" asChild>
               <Link
