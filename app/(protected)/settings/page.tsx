@@ -12,7 +12,6 @@ export default async function SettingsAccountPage() {
   }
 
   const type = "Google OAuth";
-  const plan = "Free";
   const { email, name } = user;
 
   return (
@@ -28,10 +27,6 @@ export default async function SettingsAccountPage() {
       <div>
         <h3 className="text-sm font-medium">Type</h3>
         <p className="text-sm text-muted-foreground">{type}</p>
-      </div>
-      <div>
-        <h3 className="text-sm font-medium">Plan</h3>
-        <p className="text-sm text-muted-foreground">{plan}</p>
       </div>
     </div>
   );

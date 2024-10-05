@@ -19,6 +19,7 @@ export async function GET(
     if (!signedUrl) {
       return new Response("Failed to generate download URL", { status: 500 });
     }
+    
     // NOTE: You can directly return the signedUrl, but we are fetching the files
     // from S3 using the signed URL to avoid any unauthorized access to the files.
     const response = await fetch(signedUrl);

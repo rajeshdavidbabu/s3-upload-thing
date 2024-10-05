@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { SidebarNav } from "./components/sidebar-nav";
+import { SidebarNav } from "@/components/general/sidebar-nav";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
