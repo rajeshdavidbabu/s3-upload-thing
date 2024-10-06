@@ -1,8 +1,6 @@
 
 ## Tech Stack
-- **Framework:** [Next.js](https://nextjs.org)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com)
-- **UI Components:** [shadcn/ui](https://ui.shadcn.com)
+- **Framework:** [Next.js](https://nextjs.org) + [shadcn/ui](https://ui.shadcn.com)
 - **File Uploader:** [uppy](https://uppy.io/docs/quick-start/)
 - **Storage:** [AWS S3](https://aws.amazon.com/s3/)
 - **Validation:** [Zod](https://zod.dev)
