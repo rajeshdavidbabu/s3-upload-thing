@@ -23,7 +23,7 @@ export default async function Home() {
         </h1>
         <p className="mx-auto max-w-[700px] text-gray-500 text-center mt-2 dark:text-gray-400">
           An open source file uploader that allows you to upload files to S3
-          with ease. Built with shadcn-ui, s3 and react-dropzone.
+          with ease. Built with shadcn-ui, s3, lambda and uppy.
         </p>
         <div className="flex justify-center items-center gap-3">
           <Link href="/dashboard" className="mt-5">
