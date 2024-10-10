@@ -23,7 +23,8 @@ export function UploadImage() {
         <DialogHeader>
           <DialogTitle>Upload files</DialogTitle>
           <DialogDescription>
-            Drag and drop your files here or click to browse.
+            Drag and drop your files here or click to browse. Maximum file size
+            is 500 MB specified inside s3/action.ts.
           </DialogDescription>
         </DialogHeader>
         <UppyUploader />
