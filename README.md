@@ -16,7 +16,7 @@
 - [x] Downloadable files with one button click
 
 ## Demo
-- Demo(https://www.youtube.com/watch?v=l9_se9Fo-0U)
+- [Demo](https://www.youtube.com/watch?v=l9_se9Fo-0U&t=70s)
 
 ## Architecture
 ### Upload Process
