@@ -16,10 +16,11 @@
 - [x] Downloadable files with one button click
 
 ## Demo
-- [Demo](https://www.youtube.com/watch?v=l9_se9Fo-0U&t=70s)
+
+[Video-link](https://www.youtube.com/watch?v=l9_se9Fo-0U&t=70s)
 
 ## Self-host Instructions(Setting it up locally)
-[video link](https://www.youtube.com/watch?v=l9_se9Fo-0U&t=407s)
+[Video-link](https://www.youtube.com/watch?v=l9_se9Fo-0U&t=407s)
 
 ## Architecture
 ### Upload Process
